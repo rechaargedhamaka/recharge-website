@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recharge Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?fit=crop&w=1470&q=80') no-repeat center center/cover;
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 30px;
+      color: #00e676;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .sims {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .sim {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .sim img {
+      width: 40px;
+    }
+
+    .sim:hover {
+      transform: scale(1.1);
+    }
+
+    .selected {
+      border: 3px solid #00e676;
+    }
+
+    .selected-text {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #00e676;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #00e676;
+      color: black;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #00c853;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      } to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Recharge Now</h1>
+
+    <input type="text" id="mobileNumber" placeholder="Enter Mobile Number" maxlength="10"/>
+
+    <div class="sims">
+      <div class="sim" onclick="selectSim('Jio', this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Reliance_Jio_Logo_%28October_2015%29.svg/2048px-Reliance_Jio_Logo_%28October_2015%29.svg.png" alt="Jio"/>
+      </div>
+      <div class="sim" onclick="selectSim('Airtel', this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Airtel_logo-01.png/1200px-Airtel_logo-01.png" alt="Airtel"/>
+      </div>
+      <div class="sim" onclick="selectSim('Vi', this)">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyU3IkQVfj8_FiAbRlB_D1bKLjy1lBuw-6Zw&s" alt="Vi"/>
+      </div>
+      <div class="sim" onclick="selectSim('BSNL', this)">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWxOPO6k59eC4J3QWDGDkgO0JCoQ80PogdBA&s" alt="BSNL"/>
+      </div>
+    </div>
+
+    <div class="selected-text" id="selectedText">No operator selected</div>
+
+    <select id="planSelect">
+      <option value="">Select Plan</option>
+      <option>₹209 - 22 Days - 1GB/day</option>
+      <option>₹239 - 22 Days - 1.5GB/day</option>
+      <option>₹299 - 28 Days - 1.5GB/day + SMS</option>
+      <option>₹629 - 56 Days - 2GB/day</option>
+      <option>₹899 - 90 Days - 2GB/day + OTT</option>
+      <option>₹999 - 98 Days - 2GB/day</option>
+      <option>₹799 - 84 Days - 1.5GB/day</option>
+      <option>₹399 - 28 Days - 2.5GB/day + 5g unlimited</option>
+      <option>₹859 - 84 Days - 2GB/day + 5g unlimited</option>
+    </select>
+
+    <button class="btn" onclick="recharge()">Recharge Now</button>
+  </div>
+
+  <script>
+    let selectedSim = "";
+    function selectSim(name, el) {
+      selectedSim = name;
+      document.getElementById("selectedText").innerText = `Selected Operator: ${name}`;
+      document.querySelectorAll(".sim").forEach(sim => sim.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    function recharge() {
+      const mobile = document.getElementById("mobileNumber").value;
+      const plan = document.getElementById("planSelect").value;
+
+      if (!mobile || mobile.length !== 10) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
+      if (!selectedSim) {
+        alert("Please select an operator.");
+        return;
+      }
+
+      if (!plan) {
+        alert("Please select a plan.");
+        return;
+      }
+
+      const msg = `Recharge Request:\nNumber: ${mobile}\nOperator: ${selectedSim}\nPlan: ${plan}`;
+      const whatsappLink = `https://wa.me/916307536245?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappLink, '_blank');
+    }
+  </script>
+
+</body>
+</html>
